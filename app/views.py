@@ -1,10 +1,26 @@
 from django.shortcuts import render
+from django.views import View
+from .models import CATEGORY_CHOICES, Customer, Product, Cart, OrderPlaced
+from .forms import CustomerRegistrationForm
+from django.contrib import messages
 
-def home(request):
- return render(request, 'app/home.html')
+# def home(request):
+ #return render(request, 'app/home.html')
+class ProductView(View):
+	def get(self, request):
+		
+		topwears = Product.objects.filter(category='TW')
+		bottomwears = Product.objects.filter(category='BW')
+		mobiles = Product.objects.filter(category='M')
+		return render(request, 'app/home.html', {'topwears':topwears, 'bottomwears':bottomwears, 'mobiles':mobiles})
 
-def product_detail(request):
- return render(request, 'app/productdetail.html')
+# def product_detail(request):
+ # return render(request, 'app/productdetail.html')
+class ProductDetailView(View):
+	def get(self, request, pk):
+		product = Product.objects.get(pk=pk)
+		return render(request, 'app/productdetail.html', {'product':product})
+
 
 def add_to_cart(request):
  return render(request, 'app/addtocart.html')
@@ -21,17 +37,52 @@ def address(request):
 def orders(request):
  return render(request, 'app/orders.html')
 
-def change_password(request):
- return render(request, 'app/changepassword.html')
 
-def mobile(request):
- return render(request, 'app/mobile.html')
+def mobile(request,data=None):
+	if data == None:
+		mobiles=Product.objects.filter(category='M')
+	elif data == 'Redmi' or data == 'Samsung':
+		mobiles = Product.objects.filter(category='M').filter(brand=data)
+	elif data == 'below':
+			mobiles = Product.objects.filter(category='M').filter(discounted_price__lt=10000)
+	elif data == 'above':
+			mobiles = Product.objects.filter(category='M').filter(discounted_price__gte=10000)
+	return render(request, 'app/mobile.html',{'mobiles':mobiles})
 
-def login(request):
- return render(request, 'app/login.html')
+def topware(request,data=None):
+	if data == None:
+		topwares=Product.objects.filter(category='TW')
+	elif data == 'royal' or data == 'park':
+		topwares = Product.objects.filter(category='TW').filter(brand=data)
+	elif data == 'below':
+		topwares = Product.objects.filter(category='TW').filter(discounted_price__lt=100)
+	elif data == 'above':
+		topwares = Product.objects.filter(category='TW').filter(discounted_price__gte=100)
+	return render(request, 'app/topware.html',{'topwares':topwares})
 
-def customerregistration(request):
- return render(request, 'app/customerregistration.html')
+def bottomware(request,data=None):
+	if data == None:
+		bottomwares=Product.objects.filter(category='BW')
+	elif data == 'Lee' or data == 'adidas':
+		bottomwares = Product.objects.filter(category='BW').filter(brand=data)
+	elif data == 'below':
+		bottomwares = Product.objects.filter(category='BW').filter(discounted_price__lt=200)
+	elif data == 'above':
+		bottomwares = Product.objects.filter(category='BW').filter(discounted_price__gte=200)
+	return render(request, 'app/bottomware.html',{'bottomwares':bottomwares})
+
+
+class CustomerRegistrationView(View):
+ def get(self, request):
+  form = CustomerRegistrationForm()
+  return render(request, 'app/customerregistration.html', {'form':form})
+  
+ def post(self, request):
+  form = CustomerRegistrationForm(request.POST)
+  if form.is_valid():
+   messages.success(request, 'Congratulations!! Registered Successfully.')
+   form.save()
+  return render(request, 'app/customerregistration.html', {'form':form})
 
 def checkout(request):
  return render(request, 'app/checkout.html')

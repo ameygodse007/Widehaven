@@ -1,21 +1,21 @@
 {% extends 'app/base.html' %}
 {% load static %}
-{% block title %}Mobile{% endblock title %}
+{% block title %}bottom Wear{% endblock title %}
 {% block main-content %}
 <div class="container my-5">
  <div class="row">
   <div class="col-sm-3">
    <div class="list-group">
-     <a href="{% url 'mobile' %}" class="list-group-item list-group-item-action" aria-current="true">All Mobile</a>
-     <a href="{% url 'mobiledata' 'Redmi'  %}" class="list-group-item list-group-item-action" aria-current="true">Redmi</a>
-     <a href="{% url 'mobiledata' 'Samsung'  %}" class="list-group-item list-group-item-action">Samsung</a>
-     <a href="{% url 'mobiledata' 'below'  %}" class="list-group-item list-group-item-action">Below 10000</a>
-     <a href="{% url 'mobiledata' 'above'  %}" class="list-group-item list-group-item-action">Above 10000</a>
+     <a href="{% url 'bottomware' %}" class="list-group-item list-group-item-action" aria-current="true">All Bottomware</a>
+     <a href="{% url 'bottomwaredata' 'Lee'  %}" class="list-group-item list-group-item-action" aria-current="true">Lee</a>
+     <a href="{% url 'bottomwaredata' 'adidas'  %}" class="list-group-item list-group-item-action">adidas</a>
+     <a href="{% url 'bottomwaredata' 'below'  %}" class="list-group-item list-group-item-action">Below 200</a>
+     <a href="{% url 'bottomwaredata' 'above'  %}" class="list-group-item list-group-item-action">Above 200</a>
     </div>
   </div>
   <div class="col-sm-8">
    <div class="row">
-    {% for product in mobiles %}
+    {% for product in bottomwares %}
      <div class="col-sm-4 text-center mb-4">
       <a href="{% url 'product-detail' product.id %}" class="btn">
        <div class="item">
